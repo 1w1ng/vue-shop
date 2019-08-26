@@ -6,6 +6,7 @@
 			<van-tabbar-item icon="cart-o" replace to="/dashboard/cart">购物车</van-tabbar-item>
 			<van-tabbar-item icon="manager-o" replace to="/dashboard/mine">我的</van-tabbar-item>
 		</van-tabbar>
+		<router-view></router-view>
 	</div>
 </template>
 

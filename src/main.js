@@ -14,6 +14,9 @@ if ('addEventListener' in document) {
   );
 }
 
+// 2.引入全局的样式
+import './style/common.less';
+
 new Vue({
   router,
   render: h => h(App)

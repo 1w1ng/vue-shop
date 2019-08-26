@@ -17,6 +17,9 @@ if ('addEventListener' in document) {
 // 2.引入全局的样式
 import './style/common.less';
 
+// 3.引入全局UI组件库 vant
+import './plugins/vant';
+
 new Vue({
   router,
   render: h => h(App)

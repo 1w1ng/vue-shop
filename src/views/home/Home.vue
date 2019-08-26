@@ -1,8 +1,17 @@
 <template>
 	<div id="home">
-		<Header />
-		<!-- 轮播图 -->
-		<Sowing :sowing_list="sowing_list" />
+		<div v-if="!showLoading">
+			<Header />
+			<!-- 轮播图 -->
+			<Sowing :sowing_list="sowing_list" />
+		</div>
+		<van-loading
+			color="#1989fa"
+			style="position:absolute;left:50%;top:40%;transform: translate(-50%)"
+			type="spinner"
+			v-else
+			vertical
+		>页面正在加载中...</van-loading>
 	</div>
 </template>
 
@@ -24,7 +33,9 @@
 		data() {
 			return {
 				// 首页轮播图数据
-				sowing_list: []
+				sowing_list: [],
+				// 是否显示加载图标
+				showLoading: true
 			};
 		},
 		created() {
@@ -35,6 +46,8 @@
 					// 轮播图数据
 					if (response.success) {
 						this.sowing_list = response.data.list[0].icon_list;
+						// 数据加载完成就隐藏加载动画
+						this.showLoading = false;
 					}
 				})
 				.catch(error => {

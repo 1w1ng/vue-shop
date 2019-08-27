@@ -7,6 +7,8 @@
 			<Nav :nav_list="nav_list" />
 			<!-- 限时抢购 -->
 			<FlashSale :flash_sale_product_list="flash_sale_product_list" />
+			<!-- 猜你喜欢 -->
+			<YouLike :you_like_product_list="you_like_product_list" />
 		</div>
 		<van-loading
 			color="#1989fa"
@@ -27,6 +29,7 @@
 	import Sowing from './components/sowing/Sowing';
 	import Nav from './components/nav/Nav';
 	import FlashSale from './components/flashSale/FlashSale';
+	import YouLike from './components/youlike/YouLike';
 
 	export default {
 		name: 'Home',
@@ -35,7 +38,8 @@
 			Header,
 			Sowing,
 			Nav,
-			FlashSale
+			FlashSale,
+			YouLike
 		},
 		data() {
 			return {
@@ -45,6 +49,8 @@
 				nav_list: [],
 				// 限时抢购数据
 				flash_sale_product_list: [],
+				// 猜你喜欢数据
+				you_like_product_list: [],
 				// 是否显示加载图标
 				showLoading: true
 			};
@@ -63,6 +69,8 @@
 						this.nav_list = response.data.list[2].icon_list;
 						// 限时抢购数据
 						this.flash_sale_product_list = response.data.list[3].product_list;
+						// 猜你喜欢数据
+						this.you_like_product_list = response.data.list[12].product_list;
 					}
 				})
 				.catch(error => {

@@ -4,6 +4,7 @@
 			<Header />
 			<!-- 轮播图 -->
 			<Sowing :sowing_list="sowing_list" />
+			<Nav :nav_list="nav_list" />
 		</div>
 		<van-loading
 			color="#1989fa"
@@ -22,20 +23,23 @@
 	// 2.引入主页的子组件
 	import Header from './components/header/Header';
 	import Sowing from './components/sowing/Sowing';
+	import Nav from './components/nav/Nav';
 
 	export default {
 		name: 'Home',
 		// 注册子组件
 		components: {
 			Header,
-			Sowing
+			Sowing,
+			Nav
 		},
 		data() {
 			return {
 				// 首页轮播图数据
 				sowing_list: [],
 				// 是否显示加载图标
-				showLoading: true
+				showLoading: true,
+				nav_list: []
 			};
 		},
 		created() {
@@ -43,11 +47,13 @@
 			getHomeData()
 				.then(response => {
 					console.log(response);
-					// 轮播图数据
 					if (response.success) {
+						// 轮播图数据
 						this.sowing_list = response.data.list[0].icon_list;
 						// 数据加载完成就隐藏加载动画
 						this.showLoading = false;
+						// nav数据
+						this.nav_list = response.data.list[2].icon_list;
 					}
 				})
 				.catch(error => {

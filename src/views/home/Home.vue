@@ -5,6 +5,8 @@
 			<!-- 轮播图 -->
 			<Sowing :sowing_list="sowing_list" />
 			<Nav :nav_list="nav_list" />
+			<!-- 限时抢购 -->
+			<FlashSale :flash_sale_product_list="flash_sale_product_list" />
 		</div>
 		<van-loading
 			color="#1989fa"
@@ -24,6 +26,7 @@
 	import Header from './components/header/Header';
 	import Sowing from './components/sowing/Sowing';
 	import Nav from './components/nav/Nav';
+	import FlashSale from './components/flashSale/FlashSale';
 
 	export default {
 		name: 'Home',
@@ -31,15 +34,19 @@
 		components: {
 			Header,
 			Sowing,
-			Nav
+			Nav,
+			FlashSale
 		},
 		data() {
 			return {
 				// 首页轮播图数据
 				sowing_list: [],
+				// Nav数据
+				nav_list: [],
+				// 限时抢购数据
+				flash_sale_product_list: [],
 				// 是否显示加载图标
-				showLoading: true,
-				nav_list: []
+				showLoading: true
 			};
 		},
 		created() {
@@ -54,6 +61,8 @@
 						this.showLoading = false;
 						// nav数据
 						this.nav_list = response.data.list[2].icon_list;
+						// 限时抢购数据
+						this.flash_sale_product_list = response.data.list[3].product_list;
 					}
 				})
 				.catch(error => {

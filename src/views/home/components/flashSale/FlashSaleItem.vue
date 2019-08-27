@@ -71,11 +71,11 @@
 		width: 28%;
 	}
 
-	@media screen and (min-width: 0px) and (max-width: 320px) {
-		.itemWrapper {
-			width: 33%;
-		}
-	}
+	/* @media screen and (min-width: 0px) and (max-width: 320px) {
+			.itemWrapper {
+				width: 33%;
+			}
+		} */
 
 	.imageWrapper {
 		height: 0;

@@ -2,8 +2,12 @@
 	<div class="wrapper">
 		<div class="content">
 			<div class="imageWrapper">
-				<div class="LazyLoad is-visible">
-					<img :src="product.small_image" class="image" />
+				<div class="is-visible">
+					<van-image :src="product.small_image" class="image">
+						<template v-slot:loading>
+							<van-loading size="20" type="spinner" />
+						</template>
+					</van-image>
 				</div>
 			</div>
 			<div class="infoWrapper">

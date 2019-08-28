@@ -9,6 +9,8 @@
 			<FlashSale :flash_sale_product_list="flash_sale_product_list" />
 			<!-- 猜你喜欢 -->
 			<YouLike :you_like_product_list="you_like_product_list" />
+			<!-- 返回顶部 -->
+			<MarkPage :scrollToTop="scrollToTop" v-if="showBackStatus" />
 		</div>
 		<van-loading
 			color="#1989fa"
@@ -30,6 +32,10 @@
 	import Nav from './components/nav/Nav';
 	import FlashSale from './components/flashSale/FlashSale';
 	import YouLike from './components/youlike/YouLike';
+	import MarkPage from './components/markPage/MarkPage';
+
+	// 3.引入返回顶部的函数
+	import { showBack, animate } from './../../config/global';
 
 	export default {
 		name: 'Home',
@@ -39,7 +45,8 @@
 			Sowing,
 			Nav,
 			FlashSale,
-			YouLike
+			YouLike,
+			MarkPage
 		},
 		data() {
 			return {
@@ -52,7 +59,9 @@
 				// 猜你喜欢数据
 				you_like_product_list: [],
 				// 是否显示加载图标
-				showLoading: true
+				showLoading: true,
+				// 是否显示返回顶部的按钮
+				showBackStatus: false
 			};
 		},
 		created() {
@@ -63,19 +72,33 @@
 					if (response.success) {
 						// 轮播图数据
 						this.sowing_list = response.data.list[0].icon_list;
-						// 数据加载完成就隐藏加载动画
-						this.showLoading = false;
 						// nav数据
 						this.nav_list = response.data.list[2].icon_list;
 						// 限时抢购数据
 						this.flash_sale_product_list = response.data.list[3].product_list;
 						// 猜你喜欢数据
 						this.you_like_product_list = response.data.list[12].product_list;
+
+						// 数据加载完成就隐藏加载动画
+						this.showLoading = false;
+
+						// 开始监听滚动,到达一定位置就显示返回顶部按钮
+						showBack(status => {
+							this.showBackStatus = status;
+						});
 					}
 				})
 				.catch(error => {
 					console.log('error');
 				});
+		},
+		methods: {
+			// 返回顶部
+			scrollToTop() {
+				// 做缓动动画返回顶部
+				let docB = document.documentElement || document.body;
+				animate(docB, { scrollTop: '0' }, 400, 'ease-out');
+			}
 		}
 	};
 </script>

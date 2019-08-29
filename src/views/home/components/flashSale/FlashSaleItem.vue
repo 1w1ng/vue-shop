@@ -6,9 +6,9 @@
 			</div>
 			<div>
 				<div class="name">{{product.product_name}}</div>
-				<div class="originPrice">{{product.origin_price}}</div>
+				<div class="originPrice">{{product.origin_price | moneyFormat}}</div>
 				<div class="priceWrapper">
-					<div class="price">{{product.price}}</div>
+					<div class="price">{{product.price | moneyFormat}}</div>
 					<div class="iconCartWrapper">
 						<svg
 							class="icon"
@@ -72,10 +72,10 @@
 	}
 
 	/* @media screen and (min-width: 0px) and (max-width: 320px) {
-			.itemWrapper {
-				width: 33%;
-			}
-		} */
+						.itemWrapper {
+							width: 33%;
+						}
+					} */
 
 	.imageWrapper {
 		height: 0;

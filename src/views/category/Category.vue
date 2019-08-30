@@ -6,62 +6,15 @@
 		<div class="listWrapper" v-if="!showLoading">
 			<div class="leftWrapper">
 				<ul class="wrapper">
-					<li class="categoryItem selected">
-						<span class="textWrapper">推荐</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">安心蔬菜</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">豆制品</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">新鲜水果</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">肉禽蛋</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">海鲜水产</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">乳品烘焙</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">营养早餐</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">叮咚心选</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">米面粮油</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">调味品</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">方便速食</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">冰淇淋</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">酒水饮料</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">休闲零食</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">快手菜</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">南北干货</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">宝宝餐</span>
-					</li>
-					<li class="categoryItem">
-						<span class="textWrapper">厨房用品</span>
+					<li
+						:class="{selected: currentIndex === index}"
+						:key="cate.id"
+						@click="clickLeftLi(index)"
+						class="categoryItem"
+						ref="menuList"
+						v-for="(cate, index) in categoriesData"
+					>
+						<span class="textWrapper">{{cate.name}}</span>
 					</li>
 				</ul>
 			</div>
@@ -94,7 +47,10 @@
 				showLoading: false,
 				// 左边列表数据
 				categoriesData: [],
-				categoriesDetail: []
+				// 右边列表数据
+				categoriesDetail: [],
+				// 左边列表选中与否
+				currentIndex: 0
 			};
 		},
 		created() {
@@ -104,6 +60,7 @@
 			Header
 		},
 		methods: {
+			// 初始化操作
 			async initData() {
 				// 1.获取左边的数据
 				let leftRes = await getCategories();
@@ -118,6 +75,26 @@
 					this.categoriesDetail = rightRes.data.cate;
 				}
 				console.log(this.categoriesDetail);
+
+				// 3.隐藏Loading框
+				this.showLoading = false;
+
+				// 4.初始化滚动框架
+				this.$nextTick(() => {
+					this.leftScroll = new BScroll('.leftWrapper', { probeType: 3 });
+				});
+			},
+			// 左边列表的点击切换
+			clickLeftLi(index) {
+				// 2.1 改变索引
+				this.currentIndex = index;
+
+				// 2.2 滚动到对应的位置
+				let menuLists = this.$refs.menuList;
+				let el = menuLists[index];
+
+				// 2.3 滚动到对应的元素上
+				this.leftScroll.scrollToElement(el, 300);
 			}
 		}
 	};

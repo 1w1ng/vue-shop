@@ -84,7 +84,7 @@
 	import BScroll from 'better-scroll';
 
 	// 3.引入接口
-	import { getCategories } from './../../service/api/index';
+	import { getCategories, getCategoriesDetail } from './../../service/api/index';
 
 	export default {
 		name: 'Category',
@@ -93,7 +93,8 @@
 				// 是否显示加载图标
 				showLoading: false,
 				// 左边列表数据
-				categoriesData: []
+				categoriesData: [],
+				categoriesDetail: []
 			};
 		},
 		created() {
@@ -109,7 +110,14 @@
 				if (leftRes.success) {
 					this.categoriesData = leftRes.data.cate;
 				}
-				console.log(this.categoriesData);
+				// console.log(this.categoriesData);
+
+				// 2.获取右边的数据
+				let rightRes = await getCategoriesDetail('/lk001');
+				if (rightRes.success) {
+					this.categoriesDetail = rightRes.data.cate;
+				}
+				console.log(this.categoriesDetail);
 			}
 		}
 	};

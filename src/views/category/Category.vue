@@ -18,6 +18,8 @@
 					</li>
 				</ul>
 			</div>
+			<!-- 分类右边 -->
+			<ContentView :categoriesDetailData="categoriesDetailData" />
 		</div>
 		<van-loading
 			color="#1989fa"
@@ -32,6 +34,7 @@
 <script>
 	// 1.引入子组件
 	import Header from './components/Header';
+	import ContentView from './components/ContentView';
 
 	// 2.引入滚动组件
 	import BScroll from 'better-scroll';
@@ -48,7 +51,7 @@
 				// 左边列表数据
 				categoriesData: [],
 				// 右边列表数据
-				categoriesDetail: [],
+				categoriesDetailData: [],
 				// 左边列表选中与否
 				currentIndex: 0
 			};
@@ -57,7 +60,8 @@
 			this.initData();
 		},
 		components: {
-			Header
+			Header,
+			ContentView
 		},
 		methods: {
 			// 初始化操作
@@ -72,9 +76,9 @@
 				// 2.获取右边的数据
 				let rightRes = await getCategoriesDetail('/lk001');
 				if (rightRes.success) {
-					this.categoriesDetail = rightRes.data.cate;
+					this.categoriesDetailData = rightRes.data.cate;
 				}
-				console.log(this.categoriesDetail);
+				console.log(this.categoriesDetailData);
 
 				// 3.隐藏Loading框
 				this.showLoading = false;

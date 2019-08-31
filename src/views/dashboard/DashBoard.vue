@@ -19,8 +19,15 @@
 		data() {
 			return {
 				// 选中
-				active: 0
+				active: Number(sessionStorage.getItem('tabBarActiveIndex')) || 0
 			};
+		},
+		watch: {
+			active(value) {
+				let tabBarActiveIndex = value > 0 ? value : 0;
+				// 缓存到本地
+				sessionStorage.setItem('tabBarActiveIndex', value);
+			}
 		}
 	};
 </script>

@@ -89,7 +89,7 @@
 				});
 			},
 			// 左边列表的点击切换
-			clickLeftLi(index) {
+			async clickLeftLi(index) {
 				// 2.1 改变索引
 				this.currentIndex = index;
 
@@ -99,6 +99,12 @@
 
 				// 2.3 滚动到对应的元素上
 				this.leftScroll.scrollToElement(el, 300);
+
+				// 2.4 获取右边的数据
+				let rightRes = await getCategoriesDetail(`/lk00${index + 1}`);
+				if (rightRes.success) {
+					this.categoriesDetailData = rightRes.data.cate;
+				}
 			}
 		}
 	};

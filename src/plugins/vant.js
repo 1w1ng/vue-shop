@@ -15,3 +15,7 @@ Vue.use(Loading);
 // 3.图片懒加载
 import { Image } from 'vant';
 Vue.use(Image);
+
+// 4. 提示
+import { Toast } from 'vant';
+Vue.use(Toast);

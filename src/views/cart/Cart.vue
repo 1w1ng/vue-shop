@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="tabBarRight">
-          <a href="#" class="pay">去结算(3)</a>
+          <a href="#" class="pay">去结算({{ goodsCount }})</a>
         </div>
       </div>
     </div>
@@ -65,9 +65,19 @@ export default {
   name: 'Cart',
   computed: {
     ...mapState(['shopCart']),
+    // 0.商品的总件数
+    goodsCount() {
+      let selectedGoodsCount = 0;
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (goods.checked) {
+          selectedGoodsCount += 1;
+        }
+      });
+      return selectedGoodsCount;
+    },
     // 1.商品是否全选
     isSelectedAll() {
-      let tag = true;
+      let tag = this.goodsCount > 0;
       Object.values(this.shopCart).forEach((goods, index) => {
         if (!goods.checked) {
           tag = false;

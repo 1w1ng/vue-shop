@@ -45,7 +45,9 @@
             @click.stop="selectedAll(isSelectedAll)"
           ></a>
           <span style="font-size: 16px;">全选</span>
-          <div class="selectAll">合计：<span class="totalPrice">199.00</span></div>
+          <div class="selectAll">
+            合计：<span class="totalPrice">{{ totalPrice | moneyFormat }}</span>
+          </div>
         </div>
         <div class="tabBarRight">
           <a href="#" class="pay">去结算(3)</a>
@@ -72,6 +74,16 @@ export default {
         }
       });
       return tag;
+    },
+    // 2.计算商品的总价
+    totalPrice() {
+      let totalPrice = 0;
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (goods.checked) {
+          totalPrice += goods.price * goods.num;
+        }
+      });
+      return totalPrice;
     }
   },
   methods: {

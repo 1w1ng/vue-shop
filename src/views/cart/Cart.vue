@@ -38,7 +38,12 @@
       <!--底部通栏-->
       <div class="tabBar">
         <div class="tabBarLeft">
-          <a href="javascript:;" class="cartCheckBox"></a>
+          <a
+            href="javascript:;"
+            class="cartCheckBox"
+            :checked="isSelectedAll"
+            @click.stop="selectedAll(isSelectedAll)"
+          ></a>
           <span style="font-size: 16px;">全选</span>
           <div class="selectAll">合计：<span class="totalPrice">199.00</span></div>
         </div>
@@ -57,10 +62,20 @@ import { Dialog } from 'vant';
 export default {
   name: 'Cart',
   computed: {
-    ...mapState(['shopCart'])
+    ...mapState(['shopCart']),
+    // 1.商品是否全选
+    isSelectedAll() {
+      let tag = true;
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (!goods.checked) {
+          tag = false;
+        }
+      });
+      return tag;
+    }
   },
   methods: {
-    ...mapMutations(['REDUCE_CART', 'ADD_GOODS', 'SELECTED_SINGLE_GOODS']),
+    ...mapMutations(['REDUCE_CART', 'ADD_GOODS', 'SELECTED_SINGLE_GOODS', 'SELECTED_ALL_GOODS']),
     // 1.移出购物车
     removeOutCart(goodsId, goodsNum) {
       if (goodsNum > 1) {
@@ -92,6 +107,11 @@ export default {
     // 3.单个商品选中和取消选中
     singleGoodsSelected(goodsId) {
       this.SELECTED_SINGLE_GOODS({ goodsId });
+    },
+
+    // 4.全选和取消全选
+    selectedAll(isSelected) {
+      this.SELECTED_ALL_GOODS({ isSelected });
     }
   }
 };

@@ -1,4 +1,4 @@
-import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART, SELECTED_SINGLE_GOODS } from './mutations-type';
+import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART, SELECTED_SINGLE_GOODS, SELECTED_ALL_GOODS } from './mutations-type';
 import { getStore, setStore } from './../config/global';
 import Vue from 'vue';
 
@@ -72,5 +72,19 @@ export default {
       state.shopCart = { ...shopCart };
       setStore('shopCart', state.shopCart);
     }
+  },
+
+  // 5.所有商品选中和取消选中
+  [SELECTED_ALL_GOODS](state, { isSelected }) {
+    let shopCart = state.shopCart;
+    Object.values(shopCart).forEach((goods, index) => {
+      if (goods.checked) {
+        // 存在该属性
+        goods.checked = !isSelected;
+      } else {
+        Vue.set(goods, 'checked', !isSelected);
+      }
+    });
+    state.shopCart = { ...shopCart };
   }
 };

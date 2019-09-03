@@ -3,7 +3,7 @@
     <!--头部区域-->
     <header class="titleWrapper">
       <h4><strong>购物车</strong></h4>
-      <button class="clearCart">清空购物车</button>
+      <button @click="clearCart" class="clearCart">清空购物车</button>
     </header>
     <div class="contentWrapper">
       <!--中间内容-->
@@ -77,6 +77,7 @@ export default {
     },
     // 1.商品是否全选
     isSelectedAll() {
+      let goodsCount = Object.values(this.shopCart).length;
       let tag = this.goodsCount > 0;
       Object.values(this.shopCart).forEach((goods, index) => {
         if (!goods.checked) {
@@ -97,7 +98,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['REDUCE_CART', 'ADD_GOODS', 'SELECTED_SINGLE_GOODS', 'SELECTED_ALL_GOODS']),
+    ...mapMutations(['REDUCE_CART', 'ADD_GOODS', 'SELECTED_SINGLE_GOODS', 'SELECTED_ALL_GOODS', 'CLEAR_CART']),
     // 1.移出购物车
     removeOutCart(goodsId, goodsNum) {
       if (goodsNum > 1) {
@@ -134,6 +135,20 @@ export default {
     // 4.全选和取消全选
     selectedAll(isSelected) {
       this.SELECTED_ALL_GOODS({ isSelected });
+    },
+
+    // 5.清空购物车
+    clearCart() {
+      Dialog.confirm({
+        title: '温馨提示',
+        message: '确定清空所有商品吗?'
+      })
+        .then(() => {
+          this.CLEAR_CART();
+        })
+        .catch(() => {
+          //点击取消不做改动
+        });
     }
   }
 };

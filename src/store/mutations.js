@@ -1,4 +1,11 @@
-import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART, SELECTED_SINGLE_GOODS, SELECTED_ALL_GOODS } from './mutations-type';
+import {
+  ADD_GOODS,
+  INIT_SHOP_CART,
+  REDUCE_CART,
+  SELECTED_SINGLE_GOODS,
+  SELECTED_ALL_GOODS,
+  CLEAR_CART
+} from './mutations-type';
 import { getStore, setStore } from './../config/global';
 import Vue from 'vue';
 
@@ -86,5 +93,13 @@ export default {
       }
     });
     state.shopCart = { ...shopCart };
+  },
+
+  // 6.清空购物车
+  [CLEAR_CART](state) {
+    state.shopCart = null;
+    state.shopCart = { ...state.shopCart };
+    // 同步数据
+    setStore('shopCart', state.shopCart);
   }
 };

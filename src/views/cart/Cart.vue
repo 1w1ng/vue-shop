@@ -9,16 +9,13 @@
       <!--中间内容-->
       <main class="contentWrapperList">
         <section>
-          <div
-            class="shopCartListCon"
-            v-for="(goods, index) in shopCart"
-            :key="goods.id"
-          >
+          <div class="shopCartListCon" v-for="(goods, index) in shopCart" :key="goods.id">
             <div class="left">
               <a
                 href="javascript:;"
                 class="cartCheckBox"
                 :checked="goods.checked"
+                @click.stop="singleGoodsSelected(goods.id)"
               ></a>
             </div>
             <div class="center">
@@ -31,7 +28,7 @@
                 <div class="shopDeal">
                   <span @click="removeOutCart(goods.id, goods.num)">-</span>
                   <input disabled type="number" v-model="goods.num" />
-                  <span>+</span>
+                  <span @click="addToCart(goods.id, goods.name, goods.small_image, goods.price)">+</span>
                 </div>
               </div>
             </div>
@@ -43,9 +40,7 @@
         <div class="tabBarLeft">
           <a href="javascript:;" class="cartCheckBox"></a>
           <span style="font-size: 16px;">全选</span>
-          <div class="selectAll">
-            合计：<span class="totalPrice">199.00</span>
-          </div>
+          <div class="selectAll">合计：<span class="totalPrice">199.00</span></div>
         </div>
         <div class="tabBarRight">
           <a href="#" class="pay">去结算(3)</a>
@@ -65,8 +60,8 @@ export default {
     ...mapState(['shopCart'])
   },
   methods: {
-    ...mapMutations(['REDUCE_CART']),
-    // 移出购物车
+    ...mapMutations(['REDUCE_CART', 'ADD_GOODS', 'SELECTED_SINGLE_GOODS']),
+    // 1.移出购物车
     removeOutCart(goodsId, goodsNum) {
       if (goodsNum > 1) {
         this.REDUCE_CART({ goodsId });
@@ -75,8 +70,28 @@ export default {
         Dialog.confirm({
           title: '温馨提示',
           message: '确定删除该商品吗?'
-        });
+        })
+          .then(() => {
+            this.REDUCE_CART({ goodsId });
+          })
+          .catch(() => {
+            //点击取消不做改动
+          });
       }
+    },
+    // 2.增加商品
+    addToCart(goodsId, goodsName, smallImage, goodsPrice) {
+      this.ADD_GOODS({
+        goodsId,
+        goodsName,
+        smallImage,
+        goodsPrice
+      });
+    },
+
+    // 3.单个商品选中和取消选中
+    singleGoodsSelected(goodsId) {
+      this.SELECTED_SINGLE_GOODS({ goodsId });
     }
   }
 };

@@ -1,4 +1,5 @@
-import { ADD_GOODS } from './mutations-type';
+import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART } from './mutations-type';
+import { getStore, setStore } from './../config/global';
 
 export default {
   // 1.往购物车中添加数据
@@ -19,6 +20,39 @@ export default {
         checked: true
       };
     }
+    // 1.2 产生新对象
     state.shopCart = { ...shopCart };
+
+    // 1.3 存入本地
+    setStore(shopCart, state.shopCart);
+  },
+
+  // 2.页面初始化,获取购物车的数据(本地)
+  [INIT_SHOP_CART](state) {
+    let initCart = getStore('shopCart');
+    if (initCart) {
+      state.shopCart = JSON.parse(initCart);
+    }
+  },
+
+  // 3.把商品移出购物车
+  [REDUCE_CART](state, { goodsId }) {
+    let shopCart = state.shopCart;
+    let goods = shopCart[goodsId];
+    if (goods) {
+      // 找到该商品
+      if (goods['num'] > 0) {
+        goods['num']--;
+        // 3.1 判断是否只有0个
+        if (goods['num'] === 0) {
+          delete shopCart[goodsId];
+        }
+      } else {
+        goods = null;
+      }
+      // 3.2 同步数据
+      state.shopCart = { ...shopCart };
+      setStore('shopCart', state.shopCart);
+    }
   }
 };

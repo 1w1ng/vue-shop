@@ -23,3 +23,25 @@ Vue.use(Toast);
 // 5.蒙版提示
 import { Dialog } from 'vant';
 Vue.use(Dialog);
+
+// 6.导航条
+import { NavBar } from 'vant';
+Vue.use(NavBar);
+
+// 7. 地址
+import { ContactCard, ContactList, ContactEdit } from 'vant';
+Vue.use(ContactCard)
+  .use(ContactList)
+  .use(ContactEdit);
+import { AddressList } from 'vant';
+Vue.use(AddressList);
+import { AddressEdit } from 'vant';
+Vue.use(AddressEdit);
+
+// 8.单元格
+import { Cell, CellGroup } from 'vant';
+Vue.use(Cell).use(CellGroup);
+
+// 9.提交订单
+import { SubmitBar } from 'vant';
+Vue.use(SubmitBar);

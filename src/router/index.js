@@ -16,11 +16,16 @@ const MyAddress = () => import('./../views/order/children/MyAddress.vue');
 const AddAddress = () => import('./../views/order/children/children/AddAddress.vue');
 const EditAddress = () => import('./../views/order/children/children/EditAddress.vue');
 
+// 引入登录组件
+const Login = () => import('./../views/login/Login.vue');
+
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    // 主面板
     { path: '/', redirect: '/dashboard' },
+    // 主页
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -43,6 +48,7 @@ export default new Router({
         { path: 'mine', name: 'mine', component: Mine }
       ]
     },
+    // 地址栏
     {
       path: '/confirmOrder',
       name: 'order',
@@ -59,6 +65,8 @@ export default new Router({
           ]
         }
       ]
-    }
+    },
+    // 登录
+    { path: '/login', name: 'login', component: Login }
   ]
 });

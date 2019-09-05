@@ -50,13 +50,13 @@
               </section>
               <section class="login-message">
                 <input type="text" maxlength="4" placeholder="验证码" />
-                <img class="get-verification" src="http://demo.itlike.com/web/xlmc/api/captcha" alt="captcha" />
+                <img class="get-verification" src="http://localhost:3000/web/xlmc/api/captcha" alt="captcha" />
               </section>
             </section>
           </div>
-          <button class="login-submit" @click="login">登录</button>
+          <button @click.prevent="login" class="login-submit">登录</button>
         </form>
-        <button class="login-back">返回</button>
+        <button @click.prevent="$router.back()" class="login-back">返回</button>
       </div>
     </div>
   </div>
@@ -64,6 +64,7 @@
 
 <script>
 import { getPhoneCode, phoneCodeLogin } from './../../service/api/index';
+import { mapActions } from 'vuex';
 import { Toast } from 'vant';
 
 export default {
@@ -84,6 +85,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['syncUserInfo']),
     // 1.处理登录模式
     dealLoginMode(flag) {
       this.loginMode = flag;
@@ -144,6 +146,53 @@ export default {
 
         // 3.1.2 手机验证码登录
         let result = await phoneCodeLogin(this.phone, this.code);
+        // console.log(result);
+        if (result.success_code === 200) {
+          // 保存用户信息
+          this.syncUserInfo(result.data);
+          // 回到主面板
+          this.$router.back();
+        } else {
+          Toast({
+            message: '登录失败，手机号码或者验证码不正确！',
+            duration: 500
+          });
+        }
+      } else {
+        // 3.2 用户名和密码登录
+        if (!this.user_name) {
+          Toast({
+            message: '请输入用户名！',
+            duration: 500
+          });
+          return;
+        } else if (!this.pwd) {
+          Toast({
+            message: '请输入密码！',
+            duration: 500
+          });
+          return;
+        } else if (!this.captcha) {
+          Toast({
+            message: '请输入验证码！',
+            duration: 500
+          });
+          return;
+        }
+        // 3.2.1 发起请求
+        let result = await pwdLogin(this.user_name, this.pwd, this.captcha);
+        // console.log(result);
+        if (result.success_code === 200) {
+          // 4.1 保存用户信息
+          this.syncUserInfo(result.data);
+          // 4.2 回到主面板
+          this.$router.back();
+        } else {
+          Toast({
+            message: '登录失败，用户名或者密码不正确！',
+            duration: 500
+          });
+        }
       }
     }
   }

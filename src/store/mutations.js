@@ -4,7 +4,9 @@ import {
   REDUCE_CART,
   SELECTED_SINGLE_GOODS,
   SELECTED_ALL_GOODS,
-  CLEAR_CART
+  CLEAR_CART,
+  USER_INFO,
+  INIT_USER_INFO
 } from './mutations-type';
 import { getStore, setStore } from './../config/global';
 import Vue from 'vue';
@@ -101,5 +103,21 @@ export default {
     state.shopCart = { ...state.shopCart };
     // 同步数据
     setStore('shopCart', state.shopCart);
+  },
+
+  // 7.保存用户信息到本地
+  [USER_INFO](state, { userInfo }) {
+    state.userInfo = userInfo;
+    setStore('userInfo', state.userInfo);
+  },
+
+  // 8.获取用户信息
+  [INIT_USER_INFO](state) {
+    // 获取用户信息
+    let userInfo = getStore('userInfo');
+    // 判断
+    if (userInfo) {
+      state.userInfo = JSON.parse(userInfo);
+    }
   }
 };

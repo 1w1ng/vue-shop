@@ -6,19 +6,19 @@
       <div class="login-header">
         <!--面板标题-->
         <div class="login-header-title">
-          <a href="javascript:;">手机登录</a>
-          <a href="javascript:;">密码登录</a>
+          <a :class="{ current: loginMode }" @click="dealLoginMode(true)" href="javascript:;">手机登录</a>
+          <a :class="{ current: !loginMode }" @click="dealLoginMode(false)" href="javascript:;">密码登录</a>
         </div>
       </div>
       <!--面板表单部分-->
       <div class="login-content">
         <form>
           <!--手机验证码登录部分-->
-          <div>
+          <div :class="{ current: loginMode }">
             <section class="login-message">
-              <input type="number" maxlength="11" placeholder="手机号" v-model="phone" />
-              <button class="get-verification">获取验证码</button>
-              <button disabled="disabled" class="get-verification">
+              <input type="number" maxlength="11" placeholder="手机号" />
+              <button v-if="1" class="get-verification">获取验证码</button>
+              <button v-else disabled="disabled" class="get-verification">
                 已发送(60s)
               </button>
             </section>
@@ -31,7 +31,7 @@
             </section>
           </div>
           <!--账号登录部分-->
-          <div>
+          <div :class="{ current: !loginMode }">
             <section>
               <section class="login-message">
                 <input type="tel" maxlength="11" placeholder="用户名" />
@@ -39,7 +39,7 @@
               <section class="login-verification">
                 <input type="password" maxlength="20" placeholder="密码" autocomplete="off" />
                 <div class="switch-show">
-                  <img src="./images/hide_pwd.png" alt="" width="20" />
+                  <img class="on" src="./images/hide_pwd.png" alt="" width="20" />
                   <img src="./images/show_pwd.png" alt="" width="20" />
                 </div>
               </section>
@@ -59,7 +59,19 @@
 
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  data() {
+    return {
+      // 登录模式
+      loginMode: true
+    };
+  },
+  methods: {
+    // 处理登录模式
+    dealLoginMode(flag) {
+      this.loginMode = flag;
+    }
+  }
 };
 </script>
 
@@ -71,7 +83,7 @@ export default {
 }
 
 .login-container .login-inner {
-  padding-top: 50%;
+  padding-top: 6rem;
   width: 80%;
   margin: 0 auto;
 }

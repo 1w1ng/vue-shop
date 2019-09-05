@@ -1,5 +1,5 @@
 <template>
-  <div id="mine">
+  <div id="mine" v-if="userInfo.token">
     <van-nav-bar :border="false" :fixed="true" title="我的"></van-nav-bar>
 
     <van-cell-group style="margin-top: 2.3rem">
@@ -33,9 +33,14 @@
       <van-cell icon="smile-comment" is-link title="意见反馈" value=""></van-cell>
     </van-cell-group>
   </div>
+  <SelectLogin v-else />
 </template>
 
 <script>
+import { mapState } from 'vuex';
+// 登陆
+import SelectLogin from './../../views/login/SelectLogin';
+
 export default {
   name: 'Mine',
   data() {
@@ -47,6 +52,12 @@ export default {
         { icon: 'cash-back-record', title: '售后/退款' }
       ]
     };
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  components: {
+    SelectLogin
   }
 };
 </script>

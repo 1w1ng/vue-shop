@@ -16,14 +16,19 @@
           <!--手机验证码登录部分-->
           <div :class="{ current: loginMode }">
             <section class="login-message">
-              <input type="number" maxlength="11" placeholder="手机号" />
-              <button v-if="1" class="get-verification">获取验证码</button>
-              <button v-else disabled="disabled" class="get-verification">
-                已发送(60s)
+              <input type="number" maxlength="11" placeholder="手机号" v-model="phone" />
+              <button
+                @click="getVerifyCode()"
+                v-if="!countDown"
+                class="get-verification"
+                :class="{ phone_right: phoneRight }"
+              >
+                获取验证码
               </button>
+              <button v-else disabled="disabled" class="get-verification">已发送({{ countDown }}s)</button>
             </section>
             <section class="login-verification">
-              <input type="number" maxlength="8" placeholder="验证码" />
+              <input type="number" maxlength="8" placeholder="验证码" v-model="code" />
             </section>
             <section class="login-hint">
               温馨提示：未注册的手机号，登录时将自动注册，且代表已同意
@@ -45,11 +50,11 @@
               </section>
               <section class="login-message">
                 <input type="text" maxlength="4" placeholder="验证码" />
-                <img class="get-verification" src="./images/captcha.svg" alt="captcha" />
+                <img class="get-verification" src="http://demo.itlike.com/web/xlmc/api/captcha" alt="captcha" />
               </section>
             </section>
           </div>
-          <button class="login-submit">登录</button>
+          <button class="login-submit" @click="login">登录</button>
         </form>
         <button class="login-back">返回</button>
       </div>
@@ -58,18 +63,88 @@
 </template>
 
 <script>
+import { getPhoneCode, phoneCodeLogin } from './../../service/api/index';
+import { Toast } from 'vant';
+
 export default {
   name: 'Login',
   data() {
     return {
-      // 登录模式
-      loginMode: true
+      loginMode: true, // 登录模式
+      phone: null, // 手机号码
+      countDown: 0, // 倒计时
+      code: null, // 手机验证码
+      userInfo: null // 用户信息
     };
   },
+  computed: {
+    // 验证手机号码是否正确
+    phoneRight() {
+      return /^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone);
+    }
+  },
   methods: {
-    // 处理登录模式
+    // 1.处理登录模式
     dealLoginMode(flag) {
       this.loginMode = flag;
+    },
+    // 2.获取短信验证码
+    async getVerifyCode() {
+      // 过滤
+      if (this.phoneRight) {
+        this.countDown = 60;
+        // 2.2倒计时
+        this.intervalId = setInterval(() => {
+          this.countDown--;
+          if (this.countDown === 0) {
+            clearInterval(this.intervalId);
+          }
+        }, 1000);
+        // 2.3 获取验证码
+        let result = await getPhoneCode(this.phone);
+        console.log(result);
+      }
+    },
+    // 3.登录
+    async login() {
+      // 3.1 判断登录模式
+      if (this.loginMode) {
+        //手机验证码登录
+        // 3.1.1 输入数据校验
+        if (!this.phone.trim()) {
+          Toast({
+            messgae: '请输入手机号码！',
+            duration: 500
+          });
+          return;
+        } else if (!this.phoneRight) {
+          //手机号码不正确
+          Toast({
+            messgae: '请输入正确手机号码！',
+            duration: 500
+          });
+          return;
+        }
+
+        // 验证码校验
+        if (!this.code.trim()) {
+          Toast({
+            messgae: '请输入验证码！',
+            duration: 500
+          });
+          return;
+        } else if (!/^\d{6}$/gi.test(this.code)) {
+          //验证码不正确
+          Toast({
+            messgae: '请输入正确的验证码！',
+            duration: 500
+          });
+          return;
+        }
+
+        // 3.1.2 手机验证码登录
+        let result = await phoneCodeLogin(this.phone, this.code);
+      }
     }
   }
 };

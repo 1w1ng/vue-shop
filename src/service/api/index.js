@@ -17,3 +17,6 @@ const LOCAL_BASE_URL = '/api';
 export const getPhoneCode = phone => ajax(LOCAL_BASE_URL + '/api/send_code', { phone });
 // 2.2 手机验证码登录(POST)
 export const phoneCodeLogin = (phone, code) => ajax(LOCAL_BASE_URL + '/api/login_code', { phone, code }, 'POST');
+// 2.3 用户名和密码登录(POST)
+export const pwdLogin = (user_name, user_pwd, captcha) =>
+  ajax(LOCAL_BASE_URL + '/api/login_pwd', { user_name, user_pwd, captcha }, 'POST');

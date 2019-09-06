@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { getPhoneCode, phoneCodeLogin } from './../../service/api/index';
+import { getPhoneCode, phoneCodeLogin, pwdLogin } from './../../service/api/index';
 import { mapActions } from 'vuex';
 import { Toast } from 'vant';
 

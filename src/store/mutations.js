@@ -6,9 +6,11 @@ import {
   SELECTED_ALL_GOODS,
   CLEAR_CART,
   USER_INFO,
-  INIT_USER_INFO
+  INIT_USER_INFO,
+  RESET_USER_INFO
 } from './mutations-type';
-import { getStore, setStore } from './../config/global';
+
+import { getStore, removeStore, setStore } from './../config/global';
 import Vue from 'vue';
 
 export default {
@@ -119,5 +121,11 @@ export default {
     if (userInfo) {
       state.userInfo = JSON.parse(userInfo);
     }
+  },
+
+  // 9. 退出登录
+  [RESET_USER_INFO](state) {
+    state.userInfo = {};
+    removeStore('userInfo');
   }
 };

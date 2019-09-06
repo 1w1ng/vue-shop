@@ -3,10 +3,16 @@
     <van-nav-bar :border="false" :fixed="true" title="我的"></van-nav-bar>
 
     <van-cell-group style="margin-top: 2.3rem">
-      <van-cell :center="true" is-link label-class="labelClass" style="background-color: #1989fa; color: #fff;">
+      <van-cell
+        @click="$router.push('./mine/usercenter')"
+        :center="true"
+        is-link
+        label-class="labelClass"
+        style="background-color: #1989fa; color: #fff;"
+      >
         <template slot="title">
           <div class="personMsg">
-            <img src="./images/wing.jpg" alt />
+            <img class="iconImage" src="./images/wing.jpg" alt />
             <div class="personInfo">
               <span>xxx</span>
               <span>手机号：{{ userInfo.phone }}</span>
@@ -32,6 +38,11 @@
       <van-cell icon="phone" is-link title="联系客服" value="07：00 - 22：00"></van-cell>
       <van-cell icon="smile-comment" is-link title="意见反馈" value=""></van-cell>
     </van-cell-group>
+
+    <!-- 路由出口 -->
+    <transition name="router-slider" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
   <SelectLogin v-else />
 </template>

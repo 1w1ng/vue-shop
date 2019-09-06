@@ -8,7 +8,10 @@ import DashBoard from './../views/dashboard/DashBoard.vue';
 const Home = () => import('./../views/home/Home.vue');
 const Category = () => import('./../views/category/Category.vue');
 const Cart = () => import('./../views/cart/Cart.vue');
+
+// 用户中心
 const Mine = () => import('./../views/mine/Mine.vue');
+const UserCenter = () => import('./../views/mine/children/UserCenter.vue');
 
 // 引入组件相关
 const Order = () => import('./../views/order/Order.vue');
@@ -45,7 +48,19 @@ export default new Router({
           meta: { keepAlive: true }
         },
         { path: 'cart', name: 'cart', component: Cart },
-        { path: 'mine', name: 'mine', component: Mine }
+        {
+          path: 'mine',
+          name: 'mine',
+          component: Mine,
+          children: [
+            // 用户中心
+            {
+              path: 'usercenter',
+              name: 'usercenter',
+              component: UserCenter
+            }
+          ]
+        }
       ]
     },
     // 地址栏

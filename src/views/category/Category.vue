@@ -134,6 +134,9 @@ export default {
         this.categoriesDetailData = rightRes.data.cate;
       }
     }
+  },
+  beforeDestroy() {
+    PubSub.unsubscribe('categoryAddToCart');
   }
 };
 </script>

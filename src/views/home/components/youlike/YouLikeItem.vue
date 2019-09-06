@@ -78,6 +78,9 @@ export default {
     addToCart(goods) {
       PubSub.publish('homeAddToCart', goods);
     }
+  },
+  beforeDestroy() {
+    PubSub.unsubscribe('homeAddToCart');
   }
 };
 </script>

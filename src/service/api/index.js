@@ -20,3 +20,7 @@ export const phoneCodeLogin = (phone, code) => ajax(LOCAL_BASE_URL + '/api/login
 // 2.3 用户名和密码登录(POST)
 export const pwdLogin = (user_name, user_pwd, captcha) =>
   ajax(LOCAL_BASE_URL + '/api/login_pwd', { user_name, user_pwd, captcha }, 'POST');
+// 2.4 自动登录
+export const getUserInfo = () => ajax(LOCAL_BASE_URL + '/api/userinfo');
+// 2.5 退出登录
+export const getLogOut = () => ajax(LOCAL_BASE_URL + '/api/logout');

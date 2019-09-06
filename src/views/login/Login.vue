@@ -18,7 +18,7 @@
             <section class="login-message">
               <input type="number" maxlength="11" placeholder="手机号" v-model="phone" />
               <button
-                @click="getVerifyCode()"
+                @click.prevent="getVerifyCode()"
                 v-if="!countDown"
                 class="get-verification"
                 :class="{ phone_right: phoneRight }"
@@ -177,7 +177,7 @@ export default {
 
         // 3.1.2 手机验证码登录
         let result = await phoneCodeLogin(this.phone, this.code);
-        // console.log(result);
+        console.log(result);
         if (result.success_code === 200) {
           // 保存用户信息
           this.syncUserInfo(result.data);

@@ -1,22 +1,12 @@
 <template>
   <div id="dashboard">
     <van-tabbar active-color="#1989fa" v-model="active">
-      <van-tabbar-item icon="home-o" replace to="/dashboard/home"
-        >主页</van-tabbar-item
-      >
-      <van-tabbar-item icon="apps-o" replace to="/dashboard/category"
-        >分类</van-tabbar-item
-      >
-      <van-tabbar-item
-        icon="cart-o"
-        replace
-        to="/dashboard/cart"
-        :info="goodsNum > 0 ? goodsNum : ''"
+      <van-tabbar-item icon="home-o" replace to="/dashboard/home">主页</van-tabbar-item>
+      <van-tabbar-item icon="apps-o" replace to="/dashboard/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="cart-o" replace to="/dashboard/cart" :info="goodsNum > 0 ? goodsNum : ''"
         >购物车</van-tabbar-item
       >
-      <van-tabbar-item icon="manager-o" replace to="/dashboard/mine"
-        >我的</van-tabbar-item
-      >
+      <van-tabbar-item icon="manager-o" replace to="/dashboard/mine">我的</van-tabbar-item>
     </van-tabbar>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive" />
@@ -26,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
   name: 'DashBoard',
   data() {
@@ -58,11 +48,15 @@ export default {
     }
   },
   mounted() {
+    // 0.自动登录
+    this.reqUserInfo();
+
     // 1。获取购物车的数据
     this.INIT_SHOP_CART();
   },
   methods: {
-    ...mapMutations(['INIT_SHOP_CART'])
+    ...mapMutations(['INIT_SHOP_CART']),
+    ...mapActions(['reqUserInfo'])
   }
 };
 </script>

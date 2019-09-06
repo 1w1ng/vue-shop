@@ -39,24 +39,50 @@
           <div :class="{ current: !loginMode }">
             <section>
               <section class="login-message">
-                <input type="tel" maxlength="11" placeholder="用户名" />
+                <input type="tel" maxlength="11" placeholder="用户名" v-model="user_name" />
               </section>
               <section class="login-verification">
-                <input type="password" maxlength="20" placeholder="密码" autocomplete="off" />
+                <input
+                  v-if="pwdMode"
+                  type="password"
+                  maxlength="20"
+                  placeholder="密码"
+                  autocomplete="off"
+                  v-model="pwd"
+                />
+                <input v-else type="text" maxlength="20" placeholder="密码" autocomplete="off" v-model="pwd" />
                 <div class="switch-show">
-                  <img class="on" src="./images/hide_pwd.png" alt="" width="20" />
-                  <img src="./images/show_pwd.png" alt="" width="20" />
+                  <img
+                    @click.prevent="dealPwdMode(false)"
+                    :class="{ on: pwdMode }"
+                    src="./images/hide_pwd.png"
+                    alt=""
+                    width="20"
+                  />
+                  <img
+                    @click.prevent="dealPwdMode(true)"
+                    :class="{ on: !pwdMode }"
+                    src="./images/show_pwd.png"
+                    alt=""
+                    width="20"
+                  />
                 </div>
               </section>
               <section class="login-message">
-                <input type="text" maxlength="4" placeholder="验证码" />
-                <img class="get-verification" src="http://localhost:3000/web/xlmc/api/captcha" alt="captcha" />
+                <input type="text" maxlength="4" placeholder="验证码" v-model="captcha" />
+                <img
+                  @click.prevent="getCaptcha"
+                  ref="captcha"
+                  class="get-verification"
+                  src="http://localhost:3000/web/xlmc/api/captcha"
+                  alt="captcha"
+                />
               </section>
             </section>
           </div>
-          <button @click.prevent="login" class="login-submit">登录</button>
+          <button class="login-submit" @click.prevent="login">登录</button>
         </form>
-        <button @click.prevent="$router.back()" class="login-back">返回</button>
+        <button class="login-back" @click.prevent="$router.back()">返回</button>
       </div>
     </div>
   </div>
@@ -75,7 +101,12 @@ export default {
       phone: null, // 手机号码
       countDown: 0, // 倒计时
       code: null, // 手机验证码
-      userInfo: null // 用户信息
+      userInfo: null, // 用户信息
+
+      user_name: null, // 用户名
+      pwd: null, // 密码
+      pwdMode: true, // true密文 false明文
+      captcha: null // 图形验证码
     };
   },
   computed: {
@@ -194,6 +225,18 @@ export default {
           });
         }
       }
+    },
+
+    // 4.处理密码的显示
+    dealPwdMode(flag) {
+      this.pwdMode = flag;
+    },
+
+    // 5.获取随机图形验证码
+    getCaptcha() {
+      // 1.获取验证码的标签
+      let captchaEle = this.$refs.captcha;
+      this.$set(captchaEle, 'src', 'http://localhost:3000/web/xlmc/api/captcha?time=' + new Date());
     }
   }
 };

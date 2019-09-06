@@ -107,7 +107,13 @@ export default {
 
       // 4.初始化滚动框架
       this.$nextTick(() => {
-        this.leftScroll = new BScroll('.leftWrapper', { probeType: 3 });
+        this.leftScroll = new BScroll('.leftWrapper', {
+          probeType: 3,
+          click: true,
+          scrollY: true,
+          tap: true,
+          mouseWheel: true
+        });
       });
     },
     // 左边列表的点击切换

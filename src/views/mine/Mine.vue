@@ -8,8 +8,8 @@
           <div class="personMsg">
             <img src="./images/wing.jpg" alt />
             <div class="personInfo">
-              <span>黄传波</span>
-              <span>手机号：15623886416</span>
+              <span>xxx</span>
+              <span>手机号：{{ userInfo.phone }}</span>
             </div>
           </div>
         </template>
@@ -29,7 +29,7 @@
     </van-cell-group>
 
     <van-cell-group style="margin-top: 0.6rem">
-      <van-cell icon="phone" is-link title="联系客服" value="客服时间 07:00-22：00"></van-cell>
+      <van-cell icon="phone" is-link title="联系客服" value="07：00 - 22：00"></van-cell>
       <van-cell icon="smile-comment" is-link title="意见反馈" value=""></van-cell>
     </van-cell-group>
   </div>

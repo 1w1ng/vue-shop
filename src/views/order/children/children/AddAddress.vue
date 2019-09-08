@@ -11,29 +11,65 @@
       :search-result="searchResult"
       @save="onSave"
       @change-detail="onChangeDetail"
+      style="margin-top: 3rem"
     />
   </div>
 </template>
 
 <script>
+import { Toast } from 'vant';
+import areaList from './../../../../config/area';
+import { addUserAddress } from './../../../../service/api/index';
+import { mapState } from 'vuex';
+import PubSub from 'pubsub-js';
+
 export default {
   name: 'AddAddress',
   data() {
     return {
-      areaList: {},
+      areaList: areaList,
       searchResult: []
     };
   },
-
+  computed: {
+    ...mapState(['userInfo'])
+  },
   methods: {
     onClickLeft() {
       this.$router.back();
     },
-    onSave() {
-      Toast('save');
-    },
-    onDelete() {
-      Toast('delete');
+    async onSave(content) {
+      if (this.userInfo.token) {
+        let result = await addUserAddress(
+          this.userInfo.token,
+          content.name,
+          content.tel,
+          content.province + content.city + content.county,
+          content.addressDetail,
+          content.postalCode,
+          content.isDefault,
+          content.province,
+          content.city,
+          content.county,
+          content.areaCode
+        );
+        // 判断
+        if (result.success_code === 200) {
+          Toast({
+            message: '添加地址成功！',
+            duration: 400
+          });
+          // 回去
+          this.$router.back();
+          // 发起通知
+          PubSub.publish('backToMyAddress');
+        } else {
+          Toast({
+            message: '添加地址失败！',
+            duration: 400
+          });
+        }
+      }
     },
     onChangeDetail(val) {
       if (val) {

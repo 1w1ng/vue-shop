@@ -6,13 +6,11 @@
     <van-address-edit
       :area-list="areaList"
       :address-info="addressInfo"
-      :search-result="searchResult"
       @change-detail="onChangeDetail"
       @delete="onDelete"
       @save="onSave"
       show-delete
       show-postal
-      show-search-result
       show-set-default
       style="margin-top: 3rem;"
     />

@@ -4,7 +4,14 @@
     <van-nav-bar :border="true" :fixed="true" title="填写订单" left-text="返回" left-arrow @click-left="onClickLeft" />
 
     <!-- 收货地址 -->
-    <van-contact-card add-text="选择收货地址" style="margin-top: 3rem;" type="add" @click="chooseAddress" />
+    <van-contact-card
+      add-text="选择收货地址"
+      style="margin-top: 3rem;"
+      :type="address_type"
+      :name="address_name"
+      :tel="address_phone"
+      @click="chooseAddress"
+    />
 
     <van-cell-group style="margin-top: 0.6rem">
       <van-cell is-link title="送达时间" value="请选择送达时间" />
@@ -42,8 +49,31 @@
 </template>
 
 <script>
+import PubSub from 'pubsub-js';
+
 export default {
   name: 'Order',
+  data() {
+    return {
+      address_type: 'add', //地址卡片类型
+      address_name: null, //收货人姓名
+      address_phone: null, //收货人电话
+      address_id: null //收货人地址ID
+    };
+  },
+  mounted() {
+    // 接受收货地址
+    PubSub.subscribe('userAddress', (msg, address) => {
+      if (msg === 'userAddress') {
+        // console.log(address);
+        // 修改卡片的类型
+        this.address_type = 'edit';
+        this.address_name = address.name;
+        this.address_phone = address.tel;
+        this.address_id = address.address_id;
+      }
+    });
+  },
   methods: {
     // 点击左边
     onClickLeft() {
@@ -56,6 +86,9 @@ export default {
     onSubmit() {
       alert(0);
     }
+  },
+  beforeDestroy() {
+    PubSub.unsubscribe('userAddress');
   }
 };
 </script>

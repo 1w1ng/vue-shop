@@ -2,7 +2,14 @@
   <div id="myAddress">
     <!-- 导航栏 -->
     <van-nav-bar :border="true" :fixed="true" @click-left="onClickLeft" left-arrow left-text="返回" title="我的地址" />
-    <van-address-list :list="list" @add="onAdd" @edit="onEdit" style="margin-top: 3rem;" v-model="chosenAddressId" />
+    <van-address-list
+      :list="list"
+      @add="onAdd"
+      @edit="onEdit"
+      @select="onBackAddress"
+      style="margin-top: 3rem;"
+      v-model="chosenAddressId"
+    />
 
     <!-- 路由出口 -->
     <transition name="router-slider" mode="out-in">

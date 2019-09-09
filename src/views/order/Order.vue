@@ -210,7 +210,7 @@ export default {
             // console.log('delResult: ', delResult);
           }
           // 跳转到我的信息
-          this.$router.replace('/dashboard/mine');
+          this.$router.replace('/dashboard/mine/mineOrder');
           window.sessionStorage.setItem('tabBarActiveIndex', '3');
         } else {
           Toast({

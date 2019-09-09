@@ -23,10 +23,18 @@
     </van-cell-group>
 
     <van-cell-group style="margin-top: 0.6rem">
-      <van-cell icon="label" is-link title="我的订单" value="查看所有的订单"></van-cell>
-      <van-grid>
-        <van-grid-item v-for="(order, index) in orderData" :key="index" :icon="order.icon" :text="order.title" />
-      </van-grid>
+      <van-cell
+        icon="label"
+        is-link
+        title="我的订单"
+        value="查看所有的订单"
+        @click="$router.push({ path: '/dashboard/mine/mineOrder' })"
+      ></van-cell>
+      <router-link tag="div" :to="{ path: '/dashboard/mine/mineOrder' }">
+        <van-grid>
+          <van-grid-item v-for="(order, index) in orderData" :key="index" :icon="order.icon" :text="order.title" />
+        </van-grid>
+      </router-link>
     </van-cell-group>
 
     <van-cell-group style="margin-top: 0.6rem">

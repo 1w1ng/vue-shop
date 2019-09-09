@@ -12,6 +12,7 @@ const Cart = () => import('./../views/cart/Cart.vue');
 // 用户中心
 const Mine = () => import('./../views/mine/Mine.vue');
 const UserCenter = () => import('./../views/mine/children/UserCenter.vue');
+const MineOrder = () => import('./../views/mine/children/MineOrder');
 
 // 引入组件相关
 const Order = () => import('./../views/order/Order.vue');
@@ -59,7 +60,9 @@ export default new Router({
               path: 'usercenter',
               name: 'usercenter',
               component: UserCenter
-            }
+            },
+            // 我的订单
+            { path: 'mineOrder', name: 'mineOrder', component: MineOrder }
           ]
         }
       ]

@@ -147,3 +147,6 @@ export const postOrder = (user_id, address_id, arrive_time, cart_shop, notice, s
 // 5.2 订单支付成功
 export const orderPaySuccess = (user_id, order_id) =>
   ajax(LOCAL_BASE_URL + '/api/order/change_status', { user_id, order_id }, 'POST');
+
+// 5.3 查询订单
+export const getOrder = (user_id, status) => ajax(LOCAL_BASE_URL + '/api/order/get', { user_id, status }, 'POST'); // pay will

@@ -30,7 +30,7 @@
 
     <van-cell-group style="margin-top: 0.6rem">
       <van-cell title="备注">
-        <input style="text-align: right;" placeholder="选填，备注您的特殊需求！" type="text" />
+        <input style="text-align: right;" placeholder="选填，备注您的特殊需求！" type="text" v-model="notice" />
       </van-cell>
     </van-cell-group>
 
@@ -68,6 +68,8 @@
 import PubSub from 'pubsub-js';
 import Moment from 'moment';
 import { mapState } from 'vuex';
+import { Toast } from 'vant';
+import { postOrder, orderPaySuccess, getAllSelectedGoods, delAllSelectedGoods } from './../../service/api/index';
 
 export default {
   name: 'Order',
@@ -86,7 +88,9 @@ export default {
       currentTime: '12:00',
 
       // 3.送达时间
-      arriveDate: '请选择送达时间'
+      arriveDate: '请选择送达时间',
+      // 4.备注
+      notice: null
     };
   },
   computed: {
@@ -109,7 +113,7 @@ export default {
           totalPrice += goods.price * goods.num;
         }
       });
-      return totalPrice;
+      return totalPrice.toFixed(2);
     },
     // 获取购物车前三件选中的
     threeShopCart() {
@@ -154,8 +158,67 @@ export default {
       this.$router.push('/confirmOrder/myAddress');
     },
     // 3.提交订单
-    onSubmit() {
-      alert(0);
+    async onSubmit() {
+      // 3.1数据验证
+      // 地址不能为空！
+      if (!this.address_id) {
+        Toast({
+          message: '请选择收货地址',
+          duration: 500
+        });
+        return;
+      }
+
+      // 送达时间不能为空！
+      if (this.arriveDate === '请选择送达时间') {
+        Toast({
+          message: '请选择送达时间',
+          duration: 500
+        });
+        return;
+      }
+
+      // 限制起送价格!
+      if (this.totalPrice <= 20) {
+        Toast({
+          message: '商品需满20元才能起送~',
+          duration: 800
+        });
+        return;
+      }
+
+      // 3.2 处理订单相关
+      if (this.userInfo.token) {
+        // 3.2.1 查询购物车订单
+        let goodsResult = await getAllSelectedGoods(this.userInfo.token);
+        // console.log(goodsResult);
+        // 3.2.2 创建订单
+        if (goodsResult.success_code === 200) {
+          let orderResult = await postOrder(
+            this.userInfo.token,
+            this.address_id,
+            this.arrive_time,
+            goodsResult.data,
+            this.notice,
+            this.totalPrice,
+            this.disPrice
+          );
+          // console.log(orderResult);
+          // 3.2.3 删除购物车已经生成订单的商品
+          if (orderResult.success_code === 200) {
+            let delResult = await delAllSelectedGoods(this.userInfo.token);
+            // console.log('delResult: ', delResult);
+          }
+          // 跳转到我的信息
+          this.$router.replace('/dashboard/mine');
+          window.sessionStorage.setItem('tabBarActiveIndex', '3');
+        } else {
+          Toast({
+            message: '获取订单商品失败！',
+            duration: 500
+          });
+        }
+      }
     },
     // 4.展示日期组件
     showDatePopup() {

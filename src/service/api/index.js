@@ -134,3 +134,16 @@ export const delUserAddress = address_id => ajax(LOCAL_BASE_URL + '/api/address/
 // 4.5 获取单条地址
 export const getCurrentUserAddress = (user_id, address_id) =>
   ajax(LOCAL_BASE_URL + '/api/address/one', { user_id, address_id }, 'POST');
+
+// 5. 订单接口
+// 5.1 提交订单
+export const postOrder = (user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price) =>
+  ajax(
+    LOCAL_BASE_URL + '/api/order/post',
+    { user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price },
+    'POST'
+  );
+
+// 5.2 订单支付成功
+export const orderPaySuccess = (user_id, order_id) =>
+  ajax(LOCAL_BASE_URL + '/api/order/change_status', { user_id, order_id }, 'POST');

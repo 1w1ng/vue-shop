@@ -15,13 +15,13 @@
 
     <van-cell-group style="margin-top: 0.6rem">
       <van-cell is-link title="送达时间" :value="arriveDate" @click="showDatePopup" />
-      <van-cell center is-link value="内容">
-        <template slot="title">
-          <img alt src="./images/detail1.jpg" style="width: 3rem;" />
-          <img alt src="./images/detail1.jpg" style="width: 3rem;" />
-          <img alt src="./images/detail1.jpg" style="width: 3rem;" />
-        </template>
-      </van-cell>
+      <router-link :to="{ path: '/confirmOrder/orderDetail' }">
+        <van-cell center is-link :value="`共${goodsCount}件`">
+          <template slot="title">
+            <img v-for="(goods, index) in threeShopCart" alt :src="goods.small_image" style="width: 3rem;" />
+          </template>
+        </van-cell>
+      </router-link>
     </van-cell-group>
 
     <van-cell-group style="margin-top: 0.6rem">
@@ -30,16 +30,21 @@
 
     <van-cell-group style="margin-top: 0.6rem">
       <van-cell title="备注">
-        <input placeholder="选填，备注您的特殊需求！" type="text" />
+        <input style="text-align: right;" placeholder="选填，备注您的特殊需求！" type="text" />
       </van-cell>
     </van-cell-group>
 
     <van-cell-group style="margin-top: 0.6rem">
-      <van-cell title="商品金额" value="¥50.30"></van-cell>
-      <van-cell title="配送费" value="¥0.00"></van-cell>
+      <van-cell title="商品金额" :value="`¥${totalPrice}`"></van-cell>
+      <van-cell title="配送费" :value="`¥${disPrice}`"></van-cell>
     </van-cell-group>
 
-    <van-submit-bar :price="3050" @submit="onSubmit" button-text="提交订单" label="实付："></van-submit-bar>
+    <van-submit-bar
+      :price="totalPrice * 100 + disPrice * 100"
+      @submit="onSubmit"
+      button-text="提交订单"
+      label="实付："
+    ></van-submit-bar>
 
     <!-- 弹出时间组件 -->
     <van-popup v-model="dateShow" position="bottom" round>
@@ -62,6 +67,7 @@
 <script>
 import PubSub from 'pubsub-js';
 import Moment from 'moment';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Order',
@@ -79,9 +85,51 @@ export default {
       // maxDate: new Date(2019, 12, 1),
       currentTime: '12:00',
 
-      // 送达时间
+      // 3.送达时间
       arriveDate: '请选择送达时间'
     };
+  },
+  computed: {
+    ...mapState(['shopCart', 'userInfo']),
+    // 商品总件数
+    goodsCount() {
+      let selectedGoodsCount = 0;
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (goods.checked) {
+          selectedGoodsCount += 1;
+        }
+      });
+      return selectedGoodsCount;
+    },
+    // 商品总价
+    totalPrice() {
+      let totalPrice = 0;
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (goods.checked) {
+          totalPrice += goods.price * goods.num;
+        }
+      });
+      return totalPrice;
+    },
+    // 获取购物车前三件选中的
+    threeShopCart() {
+      let shopCart = [];
+      Object.values(this.shopCart).forEach((goods, index) => {
+        if (goods.checked) {
+          shopCart.push(goods);
+        }
+      });
+      return shopCart.slice(0, 3);
+    },
+    // 配送费
+    disPrice() {
+      //商品总价大于40免配送费 小于40 3元配送费
+      if (this.totalPrice > 40) {
+        return 0;
+      } else {
+        return 3;
+      }
+    }
   },
   mounted() {
     // 接受收货地址
@@ -97,18 +145,19 @@ export default {
     });
   },
   methods: {
-    // 点击左边
+    // 1.点击左边
     onClickLeft() {
       this.$router.back();
     },
-    // 选择地址
+    // 2.选择地址
     chooseAddress() {
       this.$router.push('/confirmOrder/myAddress');
     },
+    // 3.提交订单
     onSubmit() {
       alert(0);
     },
-    // 展示日期组件
+    // 4.展示日期组件
     showDatePopup() {
       this.dateShow = true;
     },
@@ -119,15 +168,14 @@ export default {
       }
       return options;
     },
-    // 取消时间选择
+    // 5.取消时间选择
     onDateCancel() {
       this.dateShow = false;
     },
-    // 确认时间选择
+    // 6.确认时间选择
     onDateConfirm(value) {
       this.dateShow = false;
-      console.log(value);
-
+      // console.log(value);
       this.arriveDate = Moment(new Date()).format('YYYY-MM-DD') + ' ' + value;
     }
   },

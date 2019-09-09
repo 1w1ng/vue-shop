@@ -15,6 +15,7 @@ const UserCenter = () => import('./../views/mine/children/UserCenter.vue');
 
 // 引入组件相关
 const Order = () => import('./../views/order/Order.vue');
+const OrderDetail = () => import('./../views/order/children/OrderDetail.vue');
 const MyAddress = () => import('./../views/order/children/MyAddress.vue');
 const AddAddress = () => import('./../views/order/children/children/AddAddress.vue');
 const EditAddress = () => import('./../views/order/children/children/EditAddress.vue');
@@ -78,6 +79,12 @@ export default new Router({
             { path: 'addAddress', name: 'addAddress', component: AddAddress },
             { path: 'editAddress', name: 'editAddress', component: EditAddress }
           ]
+        },
+        // 商品清单
+        {
+          path: 'orderDetail',
+          name: 'orderDetail',
+          component: OrderDetail
         }
       ]
     },

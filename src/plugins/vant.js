@@ -49,3 +49,11 @@ Vue.use(SubmitBar);
 // 10.宫格
 import { Grid, GridItem } from 'vant';
 Vue.use(Grid).use(GridItem);
+
+// 11. 弹出层
+import { Popup } from 'vant';
+Vue.use(Popup);
+
+// 12. 日期组件
+import { DatetimePicker } from 'vant';
+Vue.use(DatetimePicker);

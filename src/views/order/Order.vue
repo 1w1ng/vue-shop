@@ -14,7 +14,7 @@
     />
 
     <van-cell-group style="margin-top: 0.6rem">
-      <van-cell is-link title="送达时间" value="请选择送达时间" />
+      <van-cell is-link title="送达时间" :value="arriveDate" @click="showDatePopup" />
       <van-cell center is-link value="内容">
         <template slot="title">
           <img alt src="./images/detail1.jpg" style="width: 3rem;" />
@@ -41,6 +41,17 @@
 
     <van-submit-bar :price="3050" @submit="onSubmit" button-text="提交订单" label="实付："></van-submit-bar>
 
+    <!-- 弹出时间组件 -->
+    <van-popup v-model="dateShow" position="bottom" round>
+      <van-datetime-picker
+        v-model="currentTime"
+        :filter="filter"
+        type="time"
+        @cancel="onDateCancel"
+        @confirm="onDateConfirm"
+      />
+    </van-popup>
+
     <!-- 路由出口 -->
     <transition name="router-slider" mode="out-in">
       <router-view></router-view>
@@ -50,15 +61,26 @@
 
 <script>
 import PubSub from 'pubsub-js';
+import Moment from 'moment';
 
 export default {
   name: 'Order',
   data() {
     return {
+      // 1.地址
       address_type: 'add', //地址卡片类型
       address_name: null, //收货人姓名
       address_phone: null, //收货人电话
-      address_id: null //收货人地址ID
+      address_id: null, //收货人地址ID
+
+      // 2.时间
+      dateShow: false,
+      // minDate: new Date(),
+      // maxDate: new Date(2019, 12, 1),
+      currentTime: '12:00',
+
+      // 送达时间
+      arriveDate: '请选择送达时间'
     };
   },
   mounted() {
@@ -85,6 +107,28 @@ export default {
     },
     onSubmit() {
       alert(0);
+    },
+    // 展示日期组件
+    showDatePopup() {
+      this.dateShow = true;
+    },
+    // 过滤时间
+    filter(type, options) {
+      if (type === 'minute') {
+        return options.filter(option => option % 10 === 0);
+      }
+      return options;
+    },
+    // 取消时间选择
+    onDateCancel() {
+      this.dateShow = false;
+    },
+    // 确认时间选择
+    onDateConfirm(value) {
+      this.dateShow = false;
+      console.log(value);
+
+      this.arriveDate = Moment(new Date()).format('YYYY-MM-DD') + ' ' + value;
     }
   },
   beforeDestroy() {

@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="tabBarRight">
-          <router-link :to="{ path: '/confirmOrder' }" class="pay" tag="a">去结算({{ goodsCount }})</router-link>
+          <button class="pay" @click="toPay">去结算({{ goodsCount }})</button>
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@ import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 // 登陆
 import SelectLogin from './../../views/login/SelectLogin';
-import { changeCartNum, clearAllCart, singerGoodsSelect, allGoodsSelect } from './../../service/api/index';
+import { changeCartNum, clearAllCart, singleGoodsSelect, allGoodsSelect } from './../../service/api/index';
 
 export default {
   name: 'Cart',
@@ -160,9 +160,9 @@ export default {
 
     // 3.单个商品选中和取消选中
     async singleGoodsSelected(goodsId) {
-      let result = await singerGoodsSelect(this.userInfo.token, goodsId);
+      let result = await singleGoodsSelect(this.userInfo.token, goodsId);
       if (result.success_code === 200) {
-        this.SELECTED_SINGER_GOODS({ goodsId });
+        this.SELECTED_SINGLE_GOODS({ goodsId });
       }
     },
 
@@ -196,6 +196,17 @@ export default {
         .catch(() => {
           //点击取消不做改动
         });
+    },
+    // 6.去支付
+    toPay() {
+      if (this.totalPrice > 0) {
+        this.$router.push('/confirmOrder');
+      } else {
+        Toast({
+          message: '请先选择商品后再结算~',
+          duration: 1000
+        });
+      }
     }
   },
   components: {

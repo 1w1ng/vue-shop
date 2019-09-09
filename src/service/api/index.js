@@ -45,7 +45,7 @@ export const changeCartNum = (user_id, goods_id, type) =>
 export const clearAllCart = user_id => ajax(LOCAL_BASE_URL + '/api/cart/clear/' + user_id);
 
 // 3.5 单个商品的选中和取消选中
-export const singerGoodsSelect = (user_id, goods_id) =>
+export const singleGoodsSelect = (user_id, goods_id) =>
   ajax(LOCAL_BASE_URL + '/api/cart/singer_select', { user_id, goods_id }, 'POST');
 
 // 3.6 所有商品的选中和取消选中

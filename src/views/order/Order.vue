@@ -40,6 +40,18 @@
     </van-cell-group>
 
     <van-submit-bar
+      v-if="totalPrice < 20"
+      disabled
+      tip="商品需要满￥20才能起送"
+      tip-icon="info-o"
+      :price="totalPrice * 100 + disPrice * 100"
+      @submit="onSubmit"
+      button-text="提交订单"
+      label="实付："
+    ></van-submit-bar>
+
+    <van-submit-bar
+      v-else
       :price="totalPrice * 100 + disPrice * 100"
       @submit="onSubmit"
       button-text="提交订单"

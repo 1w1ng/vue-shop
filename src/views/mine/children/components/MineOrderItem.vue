@@ -4,10 +4,17 @@
       <van-cell :title="order.arrive_time" :value="`${order.order_status === 'pay' ? '已支付' : '待支付'}`"></van-cell>
     </div>
     <div class="itemCenter">
-      <div class="centerLeft">
-        <img v-for="(cartGoods, index) in order.cart_shop.slice(0, 5)" :src="cartGoods.small_image" alt="" width="30" />
-      </div>
-      <div class="centerRight">{{ order.cart_shop.length > 6 ? '…' : '' }}</div>
+      <router-link :to="{ path: '/dashboard/mine/children/components/children/MineOrderPaid.vue' }">
+        <div class="centerLeft">
+          <img
+            v-for="(cartGoods, index) in order.cart_shop.slice(0, 5)"
+            :src="cartGoods.small_image"
+            alt=""
+            width="30"
+          />
+        </div>
+        <div class="centerRight">{{ order.cart_shop.length > 6 ? '…' : '' }}</div>
+      </router-link>
     </div>
     <div class="itemBottom">
       <van-cell

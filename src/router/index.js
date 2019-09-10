@@ -62,7 +62,11 @@ export default new Router({
               component: UserCenter
             },
             // 我的订单
-            { path: 'mineOrder', name: 'mineOrder', component: MineOrder }
+            {
+              path: 'mineOrder',
+              name: 'mineOrder',
+              component: MineOrder
+            }
           ]
         }
       ]

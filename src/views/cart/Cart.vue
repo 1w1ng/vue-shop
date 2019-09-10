@@ -9,7 +9,10 @@
       <!--中间内容-->
       <main class="contentWrapperList">
         <section>
-          <div class="shopCartListCon" v-for="(goods, index) in shopCart" :key="goods.id">
+          <div v-if="Object.keys(shopCart).length === 0" class="cart_empty">
+            购物车空空如也~
+          </div>
+          <div v-else class="shopCartListCon" v-for="(goods, index) in shopCart" :key="goods.id">
             <div class="left">
               <a
                 href="javascript:;"
@@ -170,7 +173,7 @@ export default {
     async selectedAll(isSelected) {
       let result = await allGoodsSelect(this.userInfo.token, isSelected);
       if (result.success_code === 200) {
-        this.SELECTED_All_GOODS({ isSelected });
+        this.SELECTED_ALL_GOODS({ isSelected });
       }
     },
 
@@ -242,7 +245,7 @@ export default {
   background-color: transparent;
   position: absolute;
   right: 0.3rem;
-  color: red;
+  color: #1989fa;
   font-size: 0.8rem;
 }
 
@@ -257,6 +260,13 @@ export default {
 
 .contentWrapperList section {
   background-color: #fff;
+}
+
+.contentWrapperList .cart_empty {
+  text-align: center;
+  background-color: #f5f5f5;
+  color: #999;
+  margin-top: 12rem;
 }
 
 .cartCheckBox {
@@ -356,7 +366,7 @@ export default {
 .tabBar {
   position: fixed;
   left: 0;
-  bottom: 2.7rem;
+  bottom: 50px;
   width: 100%;
   height: 2.5rem;
   background-color: #fff;
@@ -383,8 +393,8 @@ export default {
 }
 
 .tabBarRight .pay {
-  width: 5rem;
-  height: 2rem;
+  width: 4.6rem;
+  height: 1.8rem;
   background-color: #e9232c;
   border-radius: 1rem;
   margin-right: 0.5rem;
@@ -392,7 +402,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #fff;
 }
 </style>
